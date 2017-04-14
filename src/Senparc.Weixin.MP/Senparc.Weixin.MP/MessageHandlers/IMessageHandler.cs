@@ -37,7 +37,7 @@ namespace Senparc.Weixin.MP.MessageHandlers
 
     public interface IMessageHandler : IMessageHandler<IRequestMessageBase, IResponseMessageBase>
     {
-        new IRequestMessageBase RequestMessage { get; set; }
+        IRequestMessageBase RequestMessage { get; set; }
         new IResponseMessageBase ResponseMessage { get; set; }
     }
 }

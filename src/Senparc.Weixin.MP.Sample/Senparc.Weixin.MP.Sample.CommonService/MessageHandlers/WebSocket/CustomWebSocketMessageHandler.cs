@@ -45,6 +45,8 @@ namespace Senparc.Weixin.MP.Sample.CommonService.MessageHandlers.WebSocket
             var result = string.Concat(message.Reverse());
             await webSocketHandler.SendMessage(result);
 
+            bool successed;
+            string unsuccessMsg="";
             try
             {
                 //发送模板消息
@@ -80,11 +82,15 @@ namespace Senparc.Weixin.MP.Sample.CommonService.MessageHandlers.WebSocket
                 var appId = WebConfigurationManager.AppSettings["WxOpenAppId"];//与微信小程序账号后台的AppId设置保持一致，区分大小写。
                 var tmResult = Senparc.Weixin.WxOpen.AdvancedAPIs.Template.TemplateApi.SendTemplateMessage(appId, openId, "Oc7R_U_23T8DtVgWn3d__-WkIctx_yDWTg8_4Mx8wgY", data, receivedMessage.FormId, null,
                          null);
+                successed = true;
             }
             catch (Exception ex)
             {
-                await webSocketHandler.SendMessage(ex.Message + "\r\n\r\n" + originalData+"\r\n\r\nAPPID:" + WebConfigurationManager.AppSettings["WxOpenAppId"]);
+                successed = false;
+                unsuccessMsg = ex.Message;              
             }
+            if(!successed)
+                await webSocketHandler.SendMessage(unsuccessMsg + "\r\n\r\n" + originalData + "\r\n\r\nAPPID:" + WebConfigurationManager.AppSettings["WxOpenAppId"]);
         }
     }
 }
